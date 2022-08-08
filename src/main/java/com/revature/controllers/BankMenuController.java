@@ -2,13 +2,24 @@ package com.revature.controllers;
 
 import java.util.Scanner;
 
+import com.revature.models.Admin;
 import com.revature.models.Customer;
+import com.revature.models.Employee;
 import com.revature.services.CustomerServicesController;
+import com.revature.services.EmployeeServicesController;
+import com.revature.services.AdminServicesController;
 
 
 public class BankMenuController {
+	
 	private Customer customer = new Customer();
+	private Employee employee = new Employee();
+	private Admin admin = new Admin();
+	
+	private AdminServicesController adminServicesController = new AdminServicesController();
 	private CustomerServicesController customerServicesController = new CustomerServicesController();
+	private EmployeeServicesController employeeServicesController = new EmployeeServicesController();
+	
 	private Scanner scanner = new Scanner(System.in);
 
 	public void bankMenu() {
@@ -82,8 +93,12 @@ public class BankMenuController {
 					checkApplicationStatus();
 					break loginMenu;
 				case "2":
+					loginEmployee();
+					// navigate to employee menu
 					break loginMenu;
 				case "3":
+					loginAdmin();
+					// navigate to admin menu
 					break loginMenu;
 				default:
 					System.out.println("\nThat is not a valid input. Try again");
@@ -94,6 +109,28 @@ public class BankMenuController {
 		}//while loop
 		
 	}//loginMenu
+
+	private void loginAdmin() {
+		// TODO Auto-generated method stub
+		System.out.println("\nType your existing username: ");
+		admin.setUserName(scanner.nextLine());
+		
+		System.out.println("Type your password: ");
+		admin.setPassword(scanner.nextLine());
+		
+		adminServicesController.checkAdminLogin(admin);
+	}
+
+	private void loginEmployee() {
+		// TODO Auto-generated method stub
+		System.out.println("\nType your existing username: ");
+		employee.setUserName(scanner.nextLine());
+		
+		System.out.println("Type your password: ");
+		employee.setPassword(scanner.nextLine());
+		
+		employeeServicesController.checkEmployeeLogin(employee);
+	}
 
 	private void loginCustomer() {
 		
@@ -115,10 +152,10 @@ public class BankMenuController {
 			applyForAccount();
 		}
 		else if (status.equalsIgnoreCase("applied")) {
-			System.out.println("your financial account application is pending, please check back later");
+			System.out.println("\nYour financial account application is pending, please check back later");
 		}
 		else if (status.equalsIgnoreCase("denied")) {
-			System.out.println("We are sorry you have NOT been approved for a financial account with us."
+			System.out.println("\nWe are sorry you financial account with us has been denied."
 					+ "\nSorry for the inconvenience");
 		}
 		else if (status.equalsIgnoreCase("approved")) {
