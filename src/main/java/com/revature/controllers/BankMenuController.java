@@ -1,12 +1,15 @@
 package com.revature.controllers;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.revature.models.Admin;
 import com.revature.models.Customer;
 import com.revature.models.Employee;
+import com.revature.models.Finance;
 import com.revature.services.CustomerServicesController;
 import com.revature.services.EmployeeServicesController;
+import com.revature.services.FinanceServicesController;
 import com.revature.services.AdminServicesController;
 
 
@@ -15,10 +18,12 @@ public class BankMenuController {
 	private Customer customer = new Customer();
 	private Employee employee = new Employee();
 	private Admin admin = new Admin();
+	private Finance finance = new Finance();
 	
 	private AdminServicesController adminServicesController = new AdminServicesController();
 	private CustomerServicesController customerServicesController = new CustomerServicesController();
 	private EmployeeServicesController employeeServicesController = new EmployeeServicesController();
+	private FinanceServicesController financeServicesController = new FinanceServicesController();
 	
 	private Scanner scanner = new Scanner(System.in);
 
@@ -30,22 +35,22 @@ public class BankMenuController {
 		
 		while (!userChoice.equalsIgnoreCase("0")) {
 			System.out.println("\nMain Menu"
-					+ "\nEnter 1 - To Register As A Customer"
+					+ "\nEnter 1 - To Register"
 					+ "\nEnter 2 - To Login"
 					+ "\nEnter 0 - To Exit");
 			userChoice = scanner.nextLine();
 
 			switchChoice: 
 			switch (userChoice){
-				case "0":
-					System.out.println("\nSorry to see you leave, Goodbye.");
-					break switchChoice;
 				case "1":
 					System.out.println("\nYou selected Register\n\nThanks, for being are our newest customer!");
 					registerCustomer();
 					// No break so user can be send to Login afterwards
 				case "2":
 					loginMenu();
+					break switchChoice;
+				case "0":
+					System.out.println("\nSorry to see you leave, Goodbye.");
 					break switchChoice;
 				default:
 					System.out.println("\nThat is not a valid input. Try again!");
@@ -71,21 +76,21 @@ public class BankMenuController {
 	
 	private void loginMenu() {
 		
-		String userAnswer = "";
+		String loginChoice = "";
 		
 		loginMenu:
-		while (!userAnswer.equals("0")) {
+		while (!loginChoice.equals("0")) {
 			System.out.println("\nLogin Menu"
 					+ "\nEnter 1 - Customer Login"
 					+ "\nEnter 2 - Employee Login"
 					+" \nEnter 3 - Administrator Login"
 					+ "\nEnter 0 - To Exit");
 			
-			System.out.println("Choose a number corresponding to your role: ");
-			userAnswer = scanner.nextLine();
+			System.out.println("Choose a number: ");
+			loginChoice = scanner.nextLine();
 
 			
-			switch (userAnswer){
+			switch (loginChoice){
 				case "0":
 					break;
 				case "1":
@@ -94,11 +99,11 @@ public class BankMenuController {
 					break loginMenu;
 				case "2":
 					loginEmployee();
-					// navigate to employee menu
+					employeeMenu();
 					break loginMenu;
 				case "3":
 					loginAdmin();
-					// navigate to admin menu
+					adminMenu();
 					break loginMenu;
 				default:
 					System.out.println("\nThat is not a valid input. Try again");
@@ -110,9 +115,105 @@ public class BankMenuController {
 		
 	}//loginMenu
 
+	
+	private void employeeMenu() {
+		
+		String employeeChoice = "";
+		
+		while (!employeeChoice.equalsIgnoreCase("0")) {
+			System.out.println("\nBank Employee Menu"
+					+ "\nEnter 1 - To Display All Customer Accounts"
+					+ "\nEnter 2 - To Approve/Deny Applications" 
+					+ "\nEnter 0 - To Exit");
+			employeeChoice = scanner.nextLine();
+
+			switchChoice: 
+			switch (employeeChoice){
+				case "0":
+					break switchChoice;
+				case "1":
+					System.out.println("u entered 1");
+					//display accounts
+					break switchChoice;
+				case "2":
+					System.out.println("u entered 2");
+					updateApplications();
+					break switchChoice;
+				default:
+					System.out.println("\nThat is not a valid input. Try again!");
+					break switchChoice;
+					
+			}//switchChoice
+			
+		}//while loop
+	}
+
+	private void updateApplications() {
+		
+		List<Customer> applicationList = employeeServicesController.customerApplications();
+			
+		for(Customer a:applicationList) {
+			System.out.println(a);
+		}
+		
+		System.out.println("Enter the CustomerID of the customer you want to approve/deny");
+		customer.setCustomerId(scanner.nextInt());
+		
+		System.out.println("Type 'approved' to approve, or type 'denied' to deny application.");
+		scanner.nextLine();
+		customer.setApplicationStatus(scanner.nextLine());
+		
+		employeeServicesController.updateCustomerAppl(customer);
+		
+		String newStatus = customer.getApplicationStatus();
+		
+		if (newStatus.equalsIgnoreCase("approved")) {
+			employeeServicesController.createFinancialAccount(customer);
+		}
+	}
+
+	private void adminMenu() {
+		
+		String adminChoice = "";
+		
+		while (!adminChoice.equalsIgnoreCase("0")) {
+			System.out.println("\nBank Admin Menu"
+					+ "\nEnter 1 - To Display/Edit Customer Accounts"
+					+ "\nEnter 2 - To Display/Edit Employee Accounts"
+					+ "\nEnter 3 - To Approve/Deny Applications"
+					+ "\nEnter 4 - To Create New Employee Login"
+					+ "\nEnter 0 - To Exit");
+			adminChoice = scanner.nextLine();
+
+			switchChoice: 
+			switch (adminChoice){
+				case "0":
+					break switchChoice;
+				case "1":
+					System.out.println("u entered 1");
+					break switchChoice;
+				case "2":
+					System.out.println("u entered 2");
+					break switchChoice;
+				case "3":
+					System.out.println("u entered 3");
+					break switchChoice;
+				case "4":
+					System.out.println("u entered 4");
+					break switchChoice;
+				default:
+					System.out.println("\nThat is not a valid input. Try again!");
+					break switchChoice;
+					
+			}//switchChoice
+			
+		}//while loop
+		
+	}
+
 	private void loginAdmin() {
 		// TODO Auto-generated method stub
-		System.out.println("\nType your existing username: ");
+		System.out.println("\nAdmin:\nType your existing username: ");
 		admin.setUserName(scanner.nextLine());
 		
 		System.out.println("Type your password: ");
@@ -123,7 +224,7 @@ public class BankMenuController {
 
 	private void loginEmployee() {
 		// TODO Auto-generated method stub
-		System.out.println("\nType your existing username: ");
+		System.out.println("\nEmployee:\nType your existing username: ");
 		employee.setUserName(scanner.nextLine());
 		
 		System.out.println("Type your password: ");
@@ -134,7 +235,8 @@ public class BankMenuController {
 
 	private void loginCustomer() {
 		
-		System.out.println("\nType your existing username: ");
+		
+		System.out.println("\nCustomer:\nType your existing username: ");
 		customer.setUserName(scanner.nextLine());
 		
 		System.out.println("Type your password: ");
@@ -159,7 +261,8 @@ public class BankMenuController {
 					+ "\nSorry for the inconvenience");
 		}
 		else if (status.equalsIgnoreCase("approved")) {
-			// navigate to financial account Menu
+			importFinancialAccount();
+			customerFinancesMenu();
 		}
 		else {
 			System.out.println("an error occurred");
@@ -168,9 +271,68 @@ public class BankMenuController {
 		
 	}
 
+
+	private void importFinancialAccount() {
+		int id = customer.getCustomerId();
+		finance.setCustomerId(id);
+		financeServicesController.getCustomerFinanceInformation(finance);
+		
+	}
+
+	private void customerFinancesMenu() {
+		
+		String customerChoice = "";
+		
+		while (!customerChoice.equalsIgnoreCase("0")) {
+			System.out.println("\nAccount Balance: $"+finance.getAccountBalance()+ "\tAccount Number: #" +finance.getAccountNum()
+					+ "\nEnter 1 - To Deposit"
+					+ "\nEnter 2 - To Withdraw"
+					+" \nEnter 3 - To Transfer funds"
+					+ "\nEnter 0 - To Exit");
+			customerChoice = scanner.nextLine();
+
+			switchChoice: 
+			switch (customerChoice){
+				case "0":
+					break switchChoice;
+				case "1":
+					//unfinished
+					deposit();
+					break switchChoice;
+				case "2": 
+					//unfinished
+					withdraw();
+					break switchChoice;
+				case "3": 
+					//unfinished
+					transferfunds();
+					break switchChoice;
+				default:
+					System.out.println("\nThat is not a valid input. Try again!");
+					break switchChoice;
+					
+			}//switchChoice
+		}//while loop	
+	}//customerMenu
+
+	private void transferfunds() {
+		// TODO Auto-generated method stub
+		financeServicesController.financialTransferFunds(finance);
+	}
+
+	private void withdraw() {
+		// TODO Auto-generated method stub
+		financeServicesController.financialWithdrawal(finance);
+	}
+
+	private void deposit() {
+		// TODO Auto-generated method stub
+		financeServicesController.financialDeposit(finance);
+	}
+
 	private void applyForAccount() {
 		String answer = "";
-		System.out.println("Would you like to apply for a financial account?"
+		System.out.println("\nWould you like to apply for a financial account?"
 				+ "\nType 'yes' or 'no':");
 		answer = scanner.nextLine();
 		
@@ -222,9 +384,5 @@ public class BankMenuController {
 	}
 	
 	
-	
-	
-	
-	
-	
 }//class
+

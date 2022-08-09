@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import com.revature.models.Customer;
+import com.revature.models.Finance;
 import com.revature.utils.ConnectionUtil;
 
 public class CustomerDAOImpl implements CustomerDAO {
+	
+	public Finance finance = new Finance();
 
 	public void insertCustomer(Customer customer) {
 		try(Connection conn = ConnectionUtil.getConnection()){
@@ -20,6 +23,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			statement.setString(++count, customer.getPassword());
 
 			statement.execute();
+			System.out.println("\nRegistration successful");
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
@@ -39,7 +43,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 			if(result.next()) {
 				customer.setCustomerId(result.getInt("customer_id"));
 				customer.setApplicationStatus(result.getString("application_status"));
-				System.out.println("\nLogin successful\n");
+				
+				System.out.println("\nLogin successful");
 			}
 			else {
 				System.out.println("incorrect login! Try again soon.");
