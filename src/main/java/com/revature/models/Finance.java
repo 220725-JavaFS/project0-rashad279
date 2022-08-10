@@ -6,7 +6,24 @@ public class Finance {
 	private int accountNum;
 	private double accountBalance;
 	
+	private double deposit, withdraw, fundsToTransfer;
+	private int accountNumReceivingTransfer;
 	
+	
+	public Finance(int accountNumReceivingTransfer) {
+		super();
+		this.accountNumReceivingTransfer = accountNumReceivingTransfer;
+	}
+
+
+	public Finance(double deposit, double withdraw, double fundsToTransfer) {
+		super();
+		this.deposit = deposit;
+		this.withdraw = withdraw;
+		this.fundsToTransfer = fundsToTransfer;
+	}
+
+
 	public Finance() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -55,6 +72,46 @@ public class Finance {
 
 	public void setAccountBalance(double accountBalance) {
 		this.accountBalance = accountBalance;
+	}
+
+
+	public double getDeposit() {
+		return deposit;
+	}
+
+
+	public void setDeposit(double deposit) {
+		this.deposit = deposit;
+	}
+
+
+	public double getWithdraw() {
+		return withdraw;
+	}
+
+
+	public void setWithdraw(double withdraw) {
+		this.withdraw = withdraw;
+	}
+
+
+	public double getFundsToTransfer() {
+		return fundsToTransfer;
+	}
+
+
+	public void setFundsToTransfer(double fundsToTransfer) {
+		this.fundsToTransfer = fundsToTransfer;
+	}
+
+
+	public int getAccountNumReceivingTransfer() {
+		return accountNumReceivingTransfer;
+	}
+
+
+	public void setAccountNumReceivingTransfer(int accountNumReceivingTransfer) {
+		this.accountNumReceivingTransfer = accountNumReceivingTransfer;
 	}
 
 

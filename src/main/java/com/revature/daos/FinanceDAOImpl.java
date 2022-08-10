@@ -1,6 +1,7 @@
 package com.revature.daos;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,19 +41,65 @@ public class FinanceDAOImpl implements FinanceDAO {
 
 	@Override
 	public void financialDepo(Finance finance) {
-		// TODO Auto-generated method stub
+		try(Connection conn = ConnectionUtil.getConnection()){
+			String sql = "UPDATE finances SET account_balance = account_balance + ? WHERE account_num = ?;";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int count = 0; 
+			statement.setDouble(++count, finance.getDeposit());
+			statement.setInt(++count, finance.getAccountNum());
+			
+			statement.execute();
+			
+			System.out.println("\nDeposit Complete");
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 
 	@Override
 	public void financialWithdraw(Finance finance) {
-		// TODO Auto-generated method stub
+		try(Connection conn = ConnectionUtil.getConnection()){
+			String sql = "UPDATE finances SET account_balance = account_balance - ? WHERE account_num = ?;";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int count = 0; 
+			statement.setDouble(++count, finance.getWithdraw());
+			statement.setInt(++count, finance.getAccountNum());
+			
+			statement.execute();
+			
+			System.out.println("\nWithdraw Complete");
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 
 	@Override
 	public void financialTransfer(Finance finance) {
-		// TODO Auto-generated method stub
+		try(Connection conn = ConnectionUtil.getConnection()){
+			String sql = "UPDATE finances SET account_balance = account_balance - ? WHERE account_num = ?; "
+					+ "UPDATE finances SET account_balance = account_balance + ? WHERE account_num = ?;";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int count = 0; 
+			statement.setDouble(++count, finance.getFundsToTransfer());
+			statement.setInt(++count, finance.getAccountNum());
+			statement.setDouble(++count, finance.getFundsToTransfer());
+			statement.setInt(++count, finance.getAccountNumReceivingTransfer());
+			statement.execute();
+			
+			System.out.println("\nTransfer Complete");
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

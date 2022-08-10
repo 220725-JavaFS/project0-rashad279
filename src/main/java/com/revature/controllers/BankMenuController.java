@@ -119,7 +119,7 @@ public class BankMenuController {
 	private void employeeMenu() {
 		
 		String employeeChoice = "";
-		
+		importFinancialAccount();
 		while (!employeeChoice.equalsIgnoreCase("0")) {
 			System.out.println("\nBank Employee Menu"
 					+ "\nEnter 1 - To Display All Customer Accounts"
@@ -261,7 +261,6 @@ public class BankMenuController {
 					+ "\nSorry for the inconvenience");
 		}
 		else if (status.equalsIgnoreCase("approved")) {
-			importFinancialAccount();
 			customerFinancesMenu();
 		}
 		else {
@@ -284,7 +283,10 @@ public class BankMenuController {
 		String customerChoice = "";
 		
 		while (!customerChoice.equalsIgnoreCase("0")) {
-			System.out.println("\nAccount Balance: $"+finance.getAccountBalance()+ "\tAccount Number: #" +finance.getAccountNum()
+			
+			importFinancialAccount();
+			
+			System.out.println("Account Balance: $"+finance.getAccountBalance()+ "\tAccount Number: #" +finance.getAccountNum()
 					+ "\nEnter 1 - To Deposit"
 					+ "\nEnter 2 - To Withdraw"
 					+" \nEnter 3 - To Transfer funds"
@@ -296,15 +298,12 @@ public class BankMenuController {
 				case "0":
 					break switchChoice;
 				case "1":
-					//unfinished
-					deposit();
+					depositMoney();
 					break switchChoice;
-				case "2": 
-					//unfinished
-					withdraw();
+				case "2":
+					withdrawMoney();
 					break switchChoice;
-				case "3": 
-					//unfinished
+				case "3":
 					transferfunds();
 					break switchChoice;
 				default:
@@ -316,18 +315,65 @@ public class BankMenuController {
 	}//customerMenu
 
 	private void transferfunds() {
-		// TODO Auto-generated method stub
-		financeServicesController.financialTransferFunds(finance);
+		
+		System.out.println("What is the account number you are transferring to?: ");
+		finance.setAccountNumReceivingTransfer(scanner.nextInt());
+		
+		System.out.println("How much do you want to send?: ");
+		finance.setFundsToTransfer(scanner.nextDouble());
+		scanner.nextLine();
+		
+		if (finance.getFundsToTransfer() >= 0 && finance.getFundsToTransfer() <= finance.getAccountBalance()) {
+			financeServicesController.financialTransferFunds(finance);
+		}
+		else if (finance.getFundsToTransfer() >= 0 && finance.getFundsToTransfer() > finance.getAccountBalance()) {
+			System.out.println("You dont have enough money");
+		}
+		else if (finance.getFundsToTransfer() < 0) {
+			System.out.println("Money transfer can NOT be negative");
+		}
+		else {
+			System.out.println("invalid input, try again soon");
+		}
 	}
 
-	private void withdraw() {
-		// TODO Auto-generated method stub
-		financeServicesController.financialWithdrawal(finance);
+	private void withdrawMoney() {
+		
+		
+		System.out.println("How much do you want to withdraw?: ");
+		finance.setWithdraw(scanner.nextDouble());
+		scanner.nextLine();
+		
+		if (finance.getWithdraw() >= 0 && finance.getWithdraw() <= finance.getAccountBalance()) {
+			financeServicesController.financialWithdrawal(finance);
+		}
+		else if (finance.getWithdraw() >= 0 && finance.getWithdraw() > finance.getAccountBalance()) {
+			System.out.println("You dont have enough money");
+		}
+		else if (finance.getWithdraw() < 0) {
+			System.out.println("Withdrawal can NOT be negative");
+		}
+		else {
+			System.out.println("invalid input, try again soon");
+		}
 	}
+		
 
-	private void deposit() {
-		// TODO Auto-generated method stub
-		financeServicesController.financialDeposit(finance);
+	private void depositMoney() {
+
+		System.out.println("How much do you want to deposit?: ");
+		finance.setDeposit(scanner.nextDouble());
+		scanner.nextLine();
+		
+		if (finance.getDeposit() >= 0) {
+			financeServicesController.financialDeposit(finance);
+		}
+		else if (finance.getDeposit() < 0) {
+			System.out.println("deposit can NOT be negative, try again later");
+		}
+		else {
+			System.out.println("invalid input, try again soon");
+		}
 	}
 
 	private void applyForAccount() {
