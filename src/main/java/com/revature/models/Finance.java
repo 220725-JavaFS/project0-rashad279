@@ -45,6 +45,7 @@ public class Finance {
 	}
 
 
+
 	public int getCustomerId() {
 		return customerId;
 	}

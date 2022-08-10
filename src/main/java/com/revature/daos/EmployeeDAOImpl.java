@@ -14,7 +14,8 @@ import com.revature.models.Finance;
 import com.revature.utils.ConnectionUtil;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
-
+	
+	public Employee employee = new Employee();
 	public Finance finance = new Finance();
 	@Override
 	public void validateEmployeeLogin(Employee employee) {
@@ -50,8 +51,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			
 			List<Customer> applicationList = new LinkedList <>();
 			
-			while(result.next()) { 
-				Customer customer = new Customer(
+			
+				while(result.next()) { 
+			
+					Customer customer = new Customer(
 						result.getInt("customer_id"),
 						result.getString("user_name"),
 						result.getString("pass_word"),
@@ -66,17 +69,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 						);
 				
 				applicationList.add(customer);
-				
-			}//while loop
+				}
 			
+				
 			return applicationList;
 		}//try 
 		
 		catch(SQLException e) {
 			e.printStackTrace();
-		}
-		
-		
+		}//catch
 		return null;
 	}
 
@@ -124,6 +125,45 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		
 	}
 
+	@Override
+	public List<Customer> displayCustomerAccts() {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			String sql = "SELECT * FROM customers FULL OUTER JOIN finances USING (customer_id);";
+			Statement statement = conn.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			
+			List<Customer> accountsList = new LinkedList <>();
+			
+			while(result.next()) { 
+				Customer customer = new Customer(
+						result.getInt("customer_id"),
+						result.getString("user_name"),
+						result.getString("pass_word"),
+						result.getString("first_name"),
+						result.getString("last_name"),
+						result.getString("str_num"),
+						result.getString("str_name"),
+						result.getString("city"),
+						result.getString("state"),
+						result.getString("zip"),
+						result.getString("application_status"));
+						
+				if(result.getString("application_status").equals("approved")) {
+						Finance finance = new Finance();
+						finance.setCustomerId(result.getInt("customer_id"));
+						finance.setAccountNum(result.getInt("account_num"));
+						finance.setAccountBalance(result.getDouble("account_balance"));
+						customer.setFinance(finance);
+				}
+				accountsList.add(customer);
+			}//while loop
+			return accountsList;
+		}//try 
+		catch(SQLException e) {
+			e.printStackTrace();
+		}//catch
+		return null;
+	}
 
 
 	

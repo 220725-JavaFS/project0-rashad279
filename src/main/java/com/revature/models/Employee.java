@@ -5,6 +5,7 @@ public class Employee {
 	private int employeeId;
 	private String userName;
 	private String password;
+	private int applicationChecker;
 	
 	
 	public Employee() {
@@ -97,6 +98,18 @@ public class Employee {
 	@Override
 	public String toString() {
 		return "Employee [employeeId=" + employeeId + ", userName=" + userName + ", password=" + password + "]";
+	}
+
+
+
+
+	public int getApplicationChecker() {
+		return applicationChecker;
+	}
+
+
+	public void setApplicationChecker(int applicationChecker) {
+		this.applicationChecker = applicationChecker;
 	}
 	
 	

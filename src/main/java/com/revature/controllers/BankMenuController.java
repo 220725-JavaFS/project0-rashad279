@@ -3,6 +3,7 @@ package com.revature.controllers;
 import java.util.List;
 import java.util.Scanner;
 
+
 import com.revature.models.Admin;
 import com.revature.models.Customer;
 import com.revature.models.Employee;
@@ -81,9 +82,9 @@ public class BankMenuController {
 		loginMenu:
 		while (!loginChoice.equals("0")) {
 			System.out.println("\nLogin Menu"
-					+ "\nEnter 1 - Customer Login"
-					+ "\nEnter 2 - Employee Login"
-					+" \nEnter 3 - Administrator Login"
+					+ "\nEnter 1 - For Customer Login"
+					+ "\nEnter 2 - For Employee Login"
+					+" \nEnter 3 - For Administrator Login"
 					+ "\nEnter 0 - To Exit");
 			
 			System.out.println("Choose a number: ");
@@ -119,7 +120,7 @@ public class BankMenuController {
 	private void employeeMenu() {
 		
 		String employeeChoice = "";
-		importFinancialAccount();
+
 		while (!employeeChoice.equalsIgnoreCase("0")) {
 			System.out.println("\nBank Employee Menu"
 					+ "\nEnter 1 - To Display All Customer Accounts"
@@ -132,11 +133,9 @@ public class BankMenuController {
 				case "0":
 					break switchChoice;
 				case "1":
-					System.out.println("u entered 1");
-					//display accounts
+					allCustomerAccounts();
 					break switchChoice;
 				case "2":
-					System.out.println("u entered 2");
 					updateApplications();
 					break switchChoice;
 				default:
@@ -148,29 +147,40 @@ public class BankMenuController {
 		}//while loop
 	}
 
-	private void updateApplications() {
+	private void allCustomerAccounts() {
+		List<Customer> accountsList = employeeServicesController.displayCustomerAccounts();
 		
+		for(Customer b:accountsList) {
+			System.out.println(b);
+		}
+	}
+
+	
+	private void updateApplications() {
+	
 		List<Customer> applicationList = employeeServicesController.customerApplications();
-			
-		for(Customer a:applicationList) {
+		
+		for (Customer a : applicationList) {
 			System.out.println(a);
 		}
-		
+
 		System.out.println("Enter the CustomerID of the customer you want to approve/deny");
 		customer.setCustomerId(scanner.nextInt());
-		
+
 		System.out.println("Type 'approved' to approve, or type 'denied' to deny application.");
 		scanner.nextLine();
 		customer.setApplicationStatus(scanner.nextLine());
-		
+
 		employeeServicesController.updateCustomerAppl(customer);
-		
+
 		String newStatus = customer.getApplicationStatus();
-		
+
 		if (newStatus.equalsIgnoreCase("approved")) {
 			employeeServicesController.createFinancialAccount(customer);
 		}
 	}
+
+	
 
 	private void adminMenu() {
 		
@@ -191,15 +201,19 @@ public class BankMenuController {
 					break switchChoice;
 				case "1":
 					System.out.println("u entered 1");
+					adminViewCustomerAccounts();
 					break switchChoice;
 				case "2":
 					System.out.println("u entered 2");
+					adminViewEmployeeAccounts();
 					break switchChoice;
 				case "3":
 					System.out.println("u entered 3");
+					updateApplications();
 					break switchChoice;
 				case "4":
 					System.out.println("u entered 4");
+					createNewEmployee();
 					break switchChoice;
 				default:
 					System.out.println("\nThat is not a valid input. Try again!");
@@ -209,6 +223,113 @@ public class BankMenuController {
 			
 		}//while loop
 		
+	}
+
+	private void createNewEmployee() {
+		
+		System.out.println("\nType new employee username: ");
+		employee.setUserName(scanner.nextLine());
+		
+		System.out.println("Type new employee password: ");
+		employee.setPassword(scanner.nextLine());
+	
+		adminServicesController.createNewEmployee(employee);
+		
+	}
+
+	private void adminViewEmployeeAccounts() {
+		List<Employee> employeeList = adminServicesController.employeeAccountsView(employee);
+		
+		for (Employee a : employeeList) {
+			System.out.println(a);
+		}
+		
+		String answer = "";
+		System.out.println("\nType 'change' if you want to change employee login credentials."
+				+ "\nType 'remove' if you want to remove an employee account"
+				+ "\nType '0' to exit");
+		answer = scanner.nextLine();
+		
+		if (answer.trim().equalsIgnoreCase("change")) {
+			
+			System.out.println("Please enter the employee id: ");
+			employee.setEmployeeId(scanner.nextInt());
+			scanner.nextLine();
+			
+			System.out.println("\nType new employee username: ");
+			employee.setUserName(scanner.nextLine());
+			
+			System.out.println("Type new employee password: ");
+			employee.setPassword(scanner.nextLine());
+			
+			adminServicesController.updateEmployee(employee);
+		}
+		else if (answer.trim().equalsIgnoreCase("remove")) {
+			
+			System.out.println("Please enter the employee id: ");
+			employee.setEmployeeId(scanner.nextInt());
+			
+			adminServicesController.removeEmployee(employee);
+		}
+		else if (answer.trim().equalsIgnoreCase("0")) {
+			System.out.println("you selected exit");
+		}
+		else {
+			System.out.println("invalid input. try again later!");
+		}
+	}
+
+	private void adminViewCustomerAccounts() {
+		allCustomerAccounts();
+		
+		String answer1 = "";
+		System.out.println("\nType '1' if you want to change customer login credentials."
+				+ "\nType '2' if you want update customer name and address"
+				+ "\nType '3' if you want to update customer account balance"
+				+ "\nType '4' if you want to remove a customer account"
+				+ "\nType '0' to exit");
+		answer1 = scanner.nextLine();
+		
+		if (answer1.trim().equalsIgnoreCase("1")) {
+		
+			System.out.println("Please enter the customer id: ");
+			customer.setCustomerId(scanner.nextInt());
+			scanner.nextLine();
+			
+			System.out.println("\nType new employee username: ");
+			customer.setUserName(scanner.nextLine());
+			
+			System.out.println("Type new employee password: ");
+			customer.setPassword(scanner.nextLine());
+			
+			adminServicesController.changeCustomerLogin(customer);
+			}
+		else if (answer1.trim().equalsIgnoreCase("2")) {
+			applicationQuestions();
+			
+			adminServicesController.changeCustomerAddress(customer);
+			}
+		else if (answer1.trim().equalsIgnoreCase("3")) {
+			System.out.println("Please enter the customer id: ");
+			finance.setCustomerId(scanner.nextInt());
+			
+			System.out.println("What amount do you want to change the balance to: ");
+			finance.setAccountBalance(scanner.nextDouble());
+			
+			adminServicesController.changeCustomerAccountBal(finance);
+			}
+		else if (answer1.trim().equalsIgnoreCase("4")) {
+			System.out.println("Please enter the customer id: ");
+			finance.setCustomerId(scanner.nextInt());
+			
+			adminServicesController.removeCustomerAccount(finance);
+			}
+		else if (answer1.trim().equalsIgnoreCase("0")) {
+			System.out.println("you selected exit");
+			}
+		else {
+			System.out.println("invalid input. try again later!");
+		}
 	}
 
 	private void loginAdmin() {
@@ -383,7 +504,10 @@ public class BankMenuController {
 		answer = scanner.nextLine();
 		
 		if (answer.trim().equalsIgnoreCase("yes")) {
+			System.out.println("\nApplication Questions\n");
 			applicationQuestions();
+			String a = "applied";
+			customer.setApplicationStatus(a);
 			customerServicesController.addCustomerApplication(customer);
 			System.out.println("your financial account application has been sent, please check back later!");
 		}
@@ -399,8 +523,6 @@ public class BankMenuController {
 	}
 
 	private void applicationQuestions() {
-		
-		System.out.println("\nApplication Questions\n");
 		
 		System.out.println("First Name: ");
 		customer.setFirstName(scanner.nextLine());
@@ -423,9 +545,7 @@ public class BankMenuController {
 		System.out.println("Zip: ");
 		customer.setZip(scanner.nextLine());
 		
-		// Change application status
-		String a = "applied";
-		customer.setApplicationStatus(a);
+		
 		
 	}
 	

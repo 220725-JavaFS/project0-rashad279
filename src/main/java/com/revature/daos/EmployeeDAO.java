@@ -8,6 +8,7 @@ import com.revature.models.Customer;
 
 public interface EmployeeDAO {
 	
+	
 	List <Customer> getApplications();
 
 	public abstract void validateEmployeeLogin(Employee employee);
@@ -15,6 +16,10 @@ public interface EmployeeDAO {
 	public abstract void updateCustomerApplication(Customer customer);
 
 	public abstract void createFinancialAcct(Customer customer);
+
+	List <Customer> displayCustomerAccts();
+	
+	
 	
 	
 }

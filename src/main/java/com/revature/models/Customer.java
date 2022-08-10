@@ -12,13 +12,26 @@ public class Customer {
 	private String state;
 	private String zip;
 	private String applicationStatus;
+	private Finance finance;
 	
 	
+	
+	public Finance getFinance() {
+		return finance;
+	}
+
+
+	public void setFinance(Finance finance) {
+		this.finance = finance;
+	}
+
+
 	public Customer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	
 
 	public Customer(int customerId, String userName, String password, String firstName, String lastName, String strNum,
 			String strName, String city, String state, String zip, String applicationStatus) {
@@ -36,9 +49,9 @@ public class Customer {
 		this.applicationStatus = applicationStatus;
 	}
 
-	// no id
+
 	public Customer(String userName, String password, String firstName, String lastName, String strNum, String strName,
-			String city, String state, String zip, String applicationStatus) {
+			String city, String state, String zip, String applicationStatus, Finance finance) {
 		super();
 		this.userName = userName;
 		this.password = password;
@@ -50,7 +63,28 @@ public class Customer {
 		this.state = state;
 		this.zip = zip;
 		this.applicationStatus = applicationStatus;
+		this.finance = finance;
 	}
+
+
+	public Customer(int customerId, String userName, String password, String firstName, String lastName, String strNum,
+			String strName, String city, String state, String zip, String applicationStatus, Finance finance) {
+		super();
+		this.customerId = customerId;
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.strNum = strNum;
+		this.strName = strName;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.applicationStatus = applicationStatus;
+		this.finance = finance;
+	}
+
+
 
 
 	public int getCustomerId() {
@@ -247,12 +281,21 @@ public class Customer {
 	}
 
 
+	@Override
 	public String toString() {
 		return "Customer [customerId=" + customerId + ", userName=" + userName + ", password=" + password
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", strNum=" + strNum + ", strName=" + strName
 				+ ", city=" + city + ", state=" + state + ", zip=" + zip + ", applicationStatus=" + applicationStatus
-				+ "]";
+				+ ", finance=" + finance + "]";
 	}
+
+
+
+
+	
+
+
+	
 	
 	
 	

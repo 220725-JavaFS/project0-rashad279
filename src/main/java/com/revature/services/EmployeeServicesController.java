@@ -11,7 +11,7 @@ import com.revature.models.Finance;
 public class EmployeeServicesController {
 	
 	private EmployeeDAO employeeDao = new EmployeeDAOImpl();
-
+	
 	public void checkEmployeeLogin(Employee employee) {
 		employeeDao.validateEmployeeLogin(employee);
 	}
@@ -29,7 +29,9 @@ public class EmployeeServicesController {
 		
 	}
 
-	
+	public List<Customer> displayCustomerAccounts(){
+		return employeeDao.displayCustomerAccts();
+	}
 	
 	
 	
