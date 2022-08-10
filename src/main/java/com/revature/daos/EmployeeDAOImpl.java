@@ -28,9 +28,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			if(result.next()) {
 				employee.setEmployeeId(result.getInt("employee_id"));
 				System.out.println("\nLogin successful");
+				 employee.setLoginChecker("success");
 			}
 			else {
 				System.out.println("incorrect login! Try again soon.");
+				employee.setLoginChecker("fail");
 			}
 			
 		}

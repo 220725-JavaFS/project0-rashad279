@@ -5,8 +5,24 @@ public class Admin {
 	private int adminId;
 	private String userName;
 	private String password;
+	private String loginChecker;
 	
-	
+	public Admin(String loginChecker) {
+		super();
+		this.loginChecker = loginChecker;
+	}
+
+
+	public String getLoginChecker() {
+		return loginChecker;
+	}
+
+
+	public void setLoginChecker(String loginChecker) {
+		this.loginChecker = loginChecker;
+	}
+
+
 	public Admin() {
 		super();
 		// TODO Auto-generated constructor stub

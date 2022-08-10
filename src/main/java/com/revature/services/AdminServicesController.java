@@ -56,4 +56,9 @@ public class AdminServicesController {
 		
 	}
 
+	public void changeCustomerAccountStatus(Customer customer) {
+		adminDao.changeCustomerAcctStatus(customer);
+		
+	}
+
 }

@@ -34,12 +34,13 @@ public class BankMenuController {
 		
 		System.out.println("\nWelcome To Rocket Finances");
 		
-		while (!userChoice.equalsIgnoreCase("0")) {
+		while (!userChoice.trim().equalsIgnoreCase("0")) {
 			System.out.println("\nMain Menu"
 					+ "\nEnter 1 - To Register"
 					+ "\nEnter 2 - To Login"
 					+ "\nEnter 0 - To Exit");
-			userChoice = scanner.nextLine();
+			System.out.println("Choose a number: ");
+			userChoice = scanner.nextLine().trim();
 
 			switchChoice: 
 			switch (userChoice){
@@ -66,10 +67,10 @@ public class BankMenuController {
 	private void registerCustomer() {
 		
 		System.out.println("Create a new username: ");
-		customer.setUserName(scanner.nextLine());
+		customer.setUserName(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("Create a new password: ");
-		customer.setPassword(scanner.nextLine());
+		customer.setPassword(scanner.nextLine().toLowerCase().trim());
 		
 		customerServicesController.createCustomer(customer);
 		
@@ -86,9 +87,7 @@ public class BankMenuController {
 					+ "\nEnter 2 - For Employee Login"
 					+" \nEnter 3 - For Administrator Login"
 					+ "\nEnter 0 - To Exit");
-			
-			System.out.println("Choose a number: ");
-			loginChoice = scanner.nextLine();
+			loginChoice = scanner.nextLine().trim();
 
 			
 			switch (loginChoice){
@@ -100,11 +99,15 @@ public class BankMenuController {
 					break loginMenu;
 				case "2":
 					loginEmployee();
-					employeeMenu();
+					if (employee.getLoginChecker().equals("success")) {
+						employeeMenu();
+					}
 					break loginMenu;
 				case "3":
 					loginAdmin();
+					if (admin.getLoginChecker().equals("success")){
 					adminMenu();
+					}
 					break loginMenu;
 				default:
 					System.out.println("\nThat is not a valid input. Try again");
@@ -126,7 +129,7 @@ public class BankMenuController {
 					+ "\nEnter 1 - To Display All Customer Accounts"
 					+ "\nEnter 2 - To Approve/Deny Applications" 
 					+ "\nEnter 0 - To Exit");
-			employeeChoice = scanner.nextLine();
+			employeeChoice = scanner.nextLine().trim();
 
 			switchChoice: 
 			switch (employeeChoice){
@@ -257,10 +260,10 @@ public class BankMenuController {
 			scanner.nextLine();
 			
 			System.out.println("\nType new employee username: ");
-			employee.setUserName(scanner.nextLine());
+			employee.setUserName(scanner.nextLine().toLowerCase().trim());
 			
 			System.out.println("Type new employee password: ");
-			employee.setPassword(scanner.nextLine());
+			employee.setPassword(scanner.nextLine().toLowerCase().trim());
 			
 			adminServicesController.updateEmployee(employee);
 		}
@@ -268,6 +271,7 @@ public class BankMenuController {
 			
 			System.out.println("Please enter the employee id: ");
 			employee.setEmployeeId(scanner.nextInt());
+			scanner.nextLine();
 			
 			adminServicesController.removeEmployee(employee);
 		}
@@ -287,6 +291,7 @@ public class BankMenuController {
 				+ "\nType '2' if you want update customer name and address"
 				+ "\nType '3' if you want to update customer account balance"
 				+ "\nType '4' if you want to remove a customer account"
+				+ "\nType '5' if you want to change application_status"
 				+ "\nType '0' to exit");
 		answer1 = scanner.nextLine();
 		
@@ -297,14 +302,18 @@ public class BankMenuController {
 			scanner.nextLine();
 			
 			System.out.println("\nType new employee username: ");
-			customer.setUserName(scanner.nextLine());
+			customer.setUserName(scanner.nextLine().toLowerCase().trim());
 			
 			System.out.println("Type new employee password: ");
-			customer.setPassword(scanner.nextLine());
+			customer.setPassword(scanner.nextLine().toLowerCase().trim());
 			
 			adminServicesController.changeCustomerLogin(customer);
 			}
 		else if (answer1.trim().equalsIgnoreCase("2")) {
+			System.out.println("Please enter the customer id: ");
+			customer.setCustomerId(scanner.nextInt());
+			scanner.nextLine();
+			
 			applicationQuestions();
 			
 			adminServicesController.changeCustomerAddress(customer);
@@ -312,6 +321,7 @@ public class BankMenuController {
 		else if (answer1.trim().equalsIgnoreCase("3")) {
 			System.out.println("Please enter the customer id: ");
 			finance.setCustomerId(scanner.nextInt());
+			scanner.nextLine();
 			
 			System.out.println("What amount do you want to change the balance to: ");
 			finance.setAccountBalance(scanner.nextDouble());
@@ -321,9 +331,20 @@ public class BankMenuController {
 		else if (answer1.trim().equalsIgnoreCase("4")) {
 			System.out.println("Please enter the customer id: ");
 			finance.setCustomerId(scanner.nextInt());
+			scanner.nextLine();
 			
 			adminServicesController.removeCustomerAccount(finance);
 			}
+		else if (answer1.trim().equalsIgnoreCase("5")) {
+			System.out.println("Please enter the customer id: ");
+			customer.setCustomerId(scanner.nextInt());
+			scanner.nextLine();
+			
+			System.out.println("Please enter the new customer application status: ");
+			customer.setApplicationStatus(scanner.nextLine().toLowerCase().trim());
+			
+			adminServicesController.changeCustomerAccountStatus(customer);
+		}
 		else if (answer1.trim().equalsIgnoreCase("0")) {
 			System.out.println("you selected exit");
 			}
@@ -335,10 +356,10 @@ public class BankMenuController {
 	private void loginAdmin() {
 		// TODO Auto-generated method stub
 		System.out.println("\nAdmin:\nType your existing username: ");
-		admin.setUserName(scanner.nextLine());
+		admin.setUserName(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("Type your password: ");
-		admin.setPassword(scanner.nextLine());
+		admin.setPassword(scanner.nextLine().toLowerCase().trim());
 		
 		adminServicesController.checkAdminLogin(admin);
 	}
@@ -346,10 +367,10 @@ public class BankMenuController {
 	private void loginEmployee() {
 		// TODO Auto-generated method stub
 		System.out.println("\nEmployee:\nType your existing username: ");
-		employee.setUserName(scanner.nextLine());
+		employee.setUserName(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("Type your password: ");
-		employee.setPassword(scanner.nextLine());
+		employee.setPassword(scanner.nextLine().toLowerCase().trim());
 		
 		employeeServicesController.checkEmployeeLogin(employee);
 	}
@@ -358,10 +379,10 @@ public class BankMenuController {
 		
 		
 		System.out.println("\nCustomer:\nType your existing username: ");
-		customer.setUserName(scanner.nextLine());
+		customer.setUserName(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("Type your password: ");
-		customer.setPassword(scanner.nextLine());
+		customer.setPassword(scanner.nextLine().toLowerCase().trim());
 		
 		customerServicesController.checkCustomerLogin(customer);
 	}
@@ -371,17 +392,17 @@ public class BankMenuController {
 		
 		String status = customer.getApplicationStatus();
 		
-		if (status.equalsIgnoreCase("none")) {
+		if (status.trim().equalsIgnoreCase("none")) {
 			applyForAccount();
 		}
-		else if (status.equalsIgnoreCase("applied")) {
+		else if (status.trim().equalsIgnoreCase("applied")) {
 			System.out.println("\nYour financial account application is pending, please check back later");
 		}
-		else if (status.equalsIgnoreCase("denied")) {
+		else if (status.trim().equalsIgnoreCase("denied")) {
 			System.out.println("\nWe are sorry you financial account with us has been denied."
 					+ "\nSorry for the inconvenience");
 		}
-		else if (status.equalsIgnoreCase("approved")) {
+		else if (status.trim().equalsIgnoreCase("approved")) {
 			customerFinancesMenu();
 		}
 		else {
@@ -501,7 +522,7 @@ public class BankMenuController {
 		String answer = "";
 		System.out.println("\nWould you like to apply for a financial account?"
 				+ "\nType 'yes' or 'no':");
-		answer = scanner.nextLine();
+		answer = scanner.nextLine().toLowerCase().trim();
 		
 		if (answer.trim().equalsIgnoreCase("yes")) {
 			System.out.println("\nApplication Questions\n");
@@ -525,25 +546,25 @@ public class BankMenuController {
 	private void applicationQuestions() {
 		
 		System.out.println("First Name: ");
-		customer.setFirstName(scanner.nextLine());
+		customer.setFirstName(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("Last Name: ");
-		customer.setLastName(scanner.nextLine());
+		customer.setLastName(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("Address Street Number: ");
-		customer.setStrNum(scanner.nextLine());
+		customer.setStrNum(scanner.nextLine().trim());
 		
 		System.out.println("Address Street Name: ");
-		customer.setStrName(scanner.nextLine());
+		customer.setStrName(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("City: ");
-		customer.setCity(scanner.nextLine());
+		customer.setCity(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("State: ");
-		customer.setState(scanner.nextLine());
+		customer.setState(scanner.nextLine().toLowerCase().trim());
 		
 		System.out.println("Zip: ");
-		customer.setZip(scanner.nextLine());
+		customer.setZip(scanner.nextLine().trim());
 		
 		
 		

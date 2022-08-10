@@ -26,6 +26,8 @@ public interface AdminDAO {
 	public abstract void changeCustomerAcctBal(Finance finance);
 
 	public abstract void removeCustomerAcct(Finance finance);
+
+	public abstract void changeCustomerAcctStatus(Customer customer);
 	
 	
 }

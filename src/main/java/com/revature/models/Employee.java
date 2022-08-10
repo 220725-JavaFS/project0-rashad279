@@ -6,8 +6,15 @@ public class Employee {
 	private String userName;
 	private String password;
 	private int applicationChecker;
+	private String loginChecker;
 	
 	
+	public Employee(String loginChecker) {
+		super();
+		this.loginChecker = loginChecker;
+	}
+
+
 	public Employee() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -110,6 +117,16 @@ public class Employee {
 
 	public void setApplicationChecker(int applicationChecker) {
 		this.applicationChecker = applicationChecker;
+	}
+
+
+	public String getLoginChecker() {
+		return loginChecker;
+	}
+
+
+	public void setLoginChecker(String loginChecker) {
+		this.loginChecker = loginChecker;
 	}
 	
 	

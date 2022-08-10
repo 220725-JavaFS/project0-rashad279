@@ -16,8 +16,7 @@ import com.revature.utils.ConnectionUtil;
 
 public class AdminDAOImpl implements AdminDAO {
 
-	private Customer customer = new Customer();
-	private Finance finance = new Finance();
+	
 	@Override
 	
 	public void validateAdminLogin(Admin admin) {
@@ -30,9 +29,11 @@ public class AdminDAOImpl implements AdminDAO {
 			if(result.next()) {
 				admin.setAdminId(result.getInt("admin_id"));
 				System.out.println("\nLogin successful");
+				admin.setLoginChecker("success");
 			}
 			else {
 				System.out.println("incorrect login! Try again soon.");
+				admin.setLoginChecker("fail");
 			}
 			
 		}
@@ -95,7 +96,7 @@ public class AdminDAOImpl implements AdminDAO {
 	@Override
 	public void changeEmployeeLogin(Employee employee) {
 		try(Connection conn = ConnectionUtil.getConnection()){
-			String sql = "UPDATE employees SET user_name = ?, pass_word = ?, WHERE employee_id = ?;";
+			String sql = "UPDATE employees SET user_name = ?, pass_word = ? WHERE employee_id = ?;";
 			PreparedStatement statement = conn.prepareStatement(sql);
 			
 			int count = 0; 
@@ -213,6 +214,25 @@ public class AdminDAOImpl implements AdminDAO {
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public void changeCustomerAcctStatus(Customer customer) {
+		// TODO Auto-generated method stub
+		try(Connection conn = ConnectionUtil.getConnection()){
+			String sql = "UPDATE customers SET application_status = ? WHERE customer_id = ?;";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int count = 0; 
+			statement.setString(++count, customer.getApplicationStatus());
+			statement.setInt(++count, customer.getCustomerId());
+			statement.execute();
+			
+			System.out.println("customer application status updated!");
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
